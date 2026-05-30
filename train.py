@@ -29,7 +29,7 @@ LORA_ALPHA    = 8
 
 # Training settings
 MAX_SEQ_LENGTH = 2048
-BATCH_SIZE     = 8
+BATCH_SIZE     = 32
 GRAD_ACCUM     = 4        # effective batch size = 4
 LEARNING_RATE  = 2e-4
 WARMUP_STEPS   = 5
@@ -176,7 +176,7 @@ if not args.test:
     model.save_pretrained_gguf(
         GGUF_DIR,
         tokenizer,
-        quantization_method="q4_k_m",
+        quantization_method="iq4_xs",
     )
     print(f"GGUF saved to: {GGUF_DIR}/")
 
