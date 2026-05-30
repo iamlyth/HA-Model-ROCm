@@ -29,7 +29,7 @@ LORA_ALPHA    = 8
 
 # Training settings
 MAX_SEQ_LENGTH = 2048
-BATCH_SIZE     = 8
+BATCH_SIZE     = 32
 GRAD_ACCUM     = 4        # effective batch size = 4
 LEARNING_RATE  = 2e-4
 WARMUP_STEPS   = 5
@@ -73,7 +73,7 @@ model = FastModel.get_peft_model(
 # ── Dataset ───────────────────────────────────────────────────────────────────
 
 print("Loading dataset: acon96/Home-Assistant-Requests-V2")
-dataset = load_dataset("acon96/Home-Assistant-Requests-V2", split="train", cache_dir="./datasets")
+dataset = load_dataset("acon96/Home-Assistant-Requests-V2", split="train", cache_dir="/workspace/datasets")
 
 if args.test:
     print("Test mode: using 1000 rows")
@@ -140,7 +140,7 @@ training_args = SFTConfig(
     fp16=False,
     bf16=True,
     logging_steps=1,
-    save_steps=200,
+    save_steps=50,
     save_total_limit=2,
     report_to="none",
     dataset_text_field="text",
@@ -176,7 +176,7 @@ if not args.test:
     model.save_pretrained_gguf(
         GGUF_DIR,
         tokenizer,
-        quantization_method="q4_k_m",
+        quantization_method="iq4_xs",
     )
     print(f"GGUF saved to: {GGUF_DIR}/")
 
