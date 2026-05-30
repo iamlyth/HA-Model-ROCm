@@ -84,6 +84,11 @@ uv pip install \
   "tyro==1.0.13" \
   "urllib3==2.7.0" \
   "xxhash==3.7.0" \
+  "attrs==26.1.0" \
+  "attr==0.3.2" \
+  "attrs==26.1.0" \
+  "attrs==26.1.0" \
+  "attrs==26.1.0" \
   --no-deps \
   --index-strategy unsafe-best-match
 
