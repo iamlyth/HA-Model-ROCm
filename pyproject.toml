@@ -1,15 +1,22 @@
 [project]
 name = "hamodel"
 version = "0.1.0"
-description = "Add your description here"
+description = "Gemma 4 E4B fine-tuned for Home Assistant tool calling"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.13"
 dependencies = [
-    "datasets>=2.14.4",
+    "datasets>=4.3.0",
     "huggingface-hub>=0.36.2",
-    "torch>=2.5.1",
     "unsloth>=2026.5.4",
+    "torchao",
+    "bitsandbytes",
 ]
 
-[[tool.uv.index]]
-url = "https://download.pytorch.org/whl/rocm6.2"
+# NOTE: torch, torchvision, triton, and rocm_sdk packages are NOT listed here.
+# They must be installed manually via setup.sh using the gfx1151-specific
+# nightly index: https://rocm.nightlies.amd.com/v2/gfx1151/
+# Standard torch wheels segfault on gfx1151 (AMD Strix Halo iGPU).
+# See README.md for full setup instructions.
+
+[tool.uv]
+index-strategy = "unsafe-best-match"

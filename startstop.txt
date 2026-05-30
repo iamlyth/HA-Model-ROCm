@@ -1,0 +1,5 @@
+# Pause
+kill -STOP $(pgrep -f train.py)
+
+# Resume  
+kill -CONT $(pgrep -f train.py)
