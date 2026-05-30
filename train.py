@@ -73,7 +73,7 @@ model = FastModel.get_peft_model(
 # ── Dataset ───────────────────────────────────────────────────────────────────
 
 print("Loading dataset: acon96/Home-Assistant-Requests-V2")
-dataset = load_dataset("acon96/Home-Assistant-Requests-V2", split="train", cache_dir="./datasets")
+dataset = load_dataset("acon96/Home-Assistant-Requests-V2", split="train", cache_dir="/workspace/datasets")
 
 if args.test:
     print("Test mode: using 1000 rows")
