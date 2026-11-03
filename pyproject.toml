@@ -1,7 +1,7 @@
 [project]
 name = "hamodel"
 version = "0.1.0"
-description = "Gemma 4 E4B fine-tuned for Home Assistant tool calling"
+description = "Nemotron 3.5 Bolt E4B (Gemma 4) fine-tuned for Home Assistant tool calling"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [

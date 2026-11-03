@@ -1,13 +1,17 @@
 """
-Training script for fine-tuning unsloth/gemma-4-E4B-it on the
+Training script for fine-tuning nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-BF16 on the
 acon96/Home-Assistant-Requests-V2 dataset using Unsloth + LoRA.
+
+Nemotron 3.5 Bolt E4B is NVIDIA's GRPO post-trained version of Gemma-4-E4B-it,
+already optimized for tool use, instruction following, and agentic tasks.
+Same Gemma 4 E4B architecture — exports to GGUF and runs on llama.cpp identically.
 
 Usage:
     Test run (1 epoch over 1000 rows):  python train.py --test
     Full run (209k rows):  python train.py
 
 To cache the base model locally (HuggingFace-independent):
-    huggingface-cli download unsloth/gemma-4-E4B-it --local-dir ./models/gemma-4-E4B-it
+    huggingface-cli download nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-BF16 --local-dir ./models/nemotron-e4b
 """
 
 import os
@@ -18,10 +22,10 @@ from trl import SFTTrainer, SFTConfig
 
 # ── Config ────────────────────────────────────────────────────────────────────
 
-HF_MODEL_ID   = "unsloth/gemma-4-E4B-it"
-LOCAL_MODEL   = "./models/gemma-4-e4b-it"
-OUTPUT_DIR    = "outputs/gemma4-e4b-ha"
-GGUF_DIR      = "outputs/gemma4-e4b-ha-gguf"
+HF_MODEL_ID   = "nvidia/NVIDIA-Nemotron-3.5-Bolt-E4B-BF16"
+LOCAL_MODEL   = "./models/nemotron-e4b"
+OUTPUT_DIR    = "outputs/nemotron-e4b-ha"
+GGUF_DIR      = "outputs/nemotron-e4b-ha-gguf"
 
 # LoRA settings
 LORA_RANK     = 8
@@ -176,7 +180,7 @@ if not args.test:
     model.save_pretrained_gguf(
         GGUF_DIR,
         tokenizer,
-        quantization_method="iq4_xs",
+        quantization_method="q4_k_m",
     )
     print(f"GGUF saved to: {GGUF_DIR}/")
 

@@ -3,9 +3,9 @@ import os
 from unsloth import FastModel
 from peft import PeftModel
 
-MODEL_ID = "./models/gemma-4-e4b-it"
-ADAPTER_DIR = "./outputs/gemma4-e4b-ha"
-GGUF_DIR = "./outputs/gemma4-e4b-ha-gguf"
+MODEL_ID = "./models/nemotron-e4b"
+ADAPTER_DIR = "./outputs/nemotron-e4b-ha"
+GGUF_DIR = "./outputs/nemotron-e4b-ha-gguf"
 
 print("Loading base model...")
 model, tokenizer = FastModel.from_pretrained(
@@ -20,10 +20,10 @@ print("Merging LoRA adapters...")
 model = PeftModel.from_pretrained(model, ADAPTER_DIR)
 model = model.merge_and_unload()
 
-print("Exporting to GGUF (q4_k_s)...")
+print("Exporting to GGUF (Q4_K_M)...")
 model.save_pretrained_gguf(
     GGUF_DIR,
     tokenizer,
-    quantization_method="q4_k_s",
+    quantization_method="q4_k_m",
 )
 print(f"Done! GGUF saved to {GGUF_DIR}/")
