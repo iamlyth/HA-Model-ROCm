@@ -27,6 +27,15 @@ LOCAL_MODEL   = "./models/nemotron-e4b"
 OUTPUT_DIR    = "outputs/nemotron-e4b-ha"
 GGUF_DIR      = "outputs/nemotron-e4b-ha-gguf"
 
+# Custom chat template: tools declarations render BEFORE the system text.
+# HA embeds a seconds-precision timestamp in its system message; with the
+# official ordering (system text first) every spaced command re-processes
+# the entire ~4K-token tool section (~13.5s on the Jetson). Tools-first
+# makes the tool section a stable cache prefix (~0.5s re-process).
+# Training and serving MUST use the same file: serving passes
+# --chat-template-file with this exact template.
+CHAT_TEMPLATE_PATH = "./chat_templates/nemotron_tools_first.jinja"
+
 # LoRA settings
 LORA_RANK     = 8
 LORA_ALPHA    = 8
@@ -44,6 +53,11 @@ EPOCHS_FULL    = 1        # used in full mode
 parser = argparse.ArgumentParser()
 parser.add_argument("--test", action="store_true", help="Run a quick test with 100 steps")
 args = parser.parse_args()
+
+# ── Chat template ──────────────────────────────────────────────────────────────
+
+with open(CHAT_TEMPLATE_PATH) as f:
+    CUSTOM_CHAT_TEMPLATE = f.read()
 
 # ── Model ─────────────────────────────────────────────────────────────────────
 
@@ -123,6 +137,7 @@ def format_example(example):
                 tools=example.get("tools"),
                 tokenize=False,
                 add_generation_prompt=False,
+                chat_template=CUSTOM_CHAT_TEMPLATE,
             ).removeprefix("<bos>")
         }
     except Exception as e:
